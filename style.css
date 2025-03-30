@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+/* Centered sections */
+.container {
+    max-width: 600px;
+}
+
+/* Styling for input sections */
+.p-3.border.rounded {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+}
