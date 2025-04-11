@@ -9,24 +9,43 @@
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+<!-- Top Dark Navbar (Now showing: All Subjects, Popular Groups, etc.) -->
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Study Group Finder</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="sgfinder.html">Find Groups</a></li>
-                <li class="nav-item"><a class="nav-link" href="my-groups.html">My Groups</a></li>
-                <li class="nav-item"><a class="nav-link" href="create-group.html">Create Group</a></li>
-
-            </ul>
-        </div>
+      <a class="navbar-brand" href="#">Study Group Finder</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse" id="topNavbar">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="../EventsCalendar/eventsPage.html">Event Calendar</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Study Group Finder</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Course Reviews</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Course Notes</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Campus News</a></li>
+          <li class="nav-item"><a class="nav-link" href="../StudentMarketPlace/index.html">Student Marketplace</a></li>
+                </ul>
+        </ul>
+      </div>
     </div>
-</nav>
-
+  </nav>
+  
+  <!-- Light Secondary Navbar (Now showing: Find Groups, My Groups, etc.) -->
+  <nav class="navbar navbar-expand-lg bg-light border-bottom">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse" id="bottomNavbar">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="sgfinder.html">Find Groups</a></li>
+          <li class="nav-item"><a class="nav-link" href="my-groups.html">My Groups</a></li>
+          <li class="nav-item"><a class="nav-link" href="create-group.html">Create Group</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  
 <!-- Search Bar & Filter -->
 <div class="container mt-4">
     <div class="row">
