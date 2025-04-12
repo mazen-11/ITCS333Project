@@ -5,3 +5,4 @@
 202208134, Salman Jaafar Jasim, Events Calendar, Salman-Jaafar
 202205574, ahmed jawher sultan, course notes, ahjawher
 202206948, YASEEN MOHAMED, course news, yaseen4646
+202203100, Hashem Saeed, Study Group, uni-hashem
