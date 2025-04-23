@@ -56,7 +56,6 @@ margin-top: 10px;
 
 
   .product-image {
-    max-height: 400px;
     object-fit: cover;
 }
 .thumbnail {
@@ -78,11 +77,6 @@ a {
 
 a:hover {
     text-decoration: none;
-}
-
-/* Centered sections */
-.container {
-    max-width: 600px;
 }
 
 /* Styling for input sections */
