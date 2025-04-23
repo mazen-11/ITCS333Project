@@ -37,14 +37,17 @@ body {
     justify-content: center;
   }
   
+  .col-md-4{
+    margin: 10px 0px;
+  }
+
+
   .services-section .card {
 
 margin-top: 10px;
   }
   
- .col-md-4 .card .card-img-top{
-  max-height: 260px;
- }
+
 
 
   footer {
@@ -75,10 +78,6 @@ a {
 
 a:hover {
     text-decoration: none;
-}
-
-.navbar {
-    margin-bottom: 20px;
 }
 
 /* Centered sections */
