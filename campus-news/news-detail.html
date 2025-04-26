@@ -16,13 +16,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
-                  <li class="nav-item"><a class="nav-link" href="../EventsCalendar/eventsPage.html">Event Calendar</a></li>
-                  <li class="nav-item"><a class="nav-link" href="../sgfinder/sgfinder.html">Study Group Finder</a></li>
-                  <li class="nav-item"><a class="nav-link" href="../Course_review/index.html">Course Reviews</a></li>
-                  <li class="nav-item"><a class="nav-link" href="../CourseNotes/index.html">Course Notes</a></li>
-                  <li class="nav-item"><a class="nav-link" href="index.html">Campus News</a></li>
-                  <li class="nav-item"><a class="nav-link" href="../StudentMarketPlace/index.html">Student Marketplace</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../EventsCalendar/eventsPage.html">Event Calendar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./sgfinder/sgfinder.html">Study Group Finder</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Course Reviews</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Course Notes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Campus News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../ITCS333Project/StudentMarketPlace/index.html">Student Marketplace</a></li>
                         </ul>
             </div>
         </div>
@@ -52,16 +52,16 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <h3>ITCS333</h3>
-                <p>G6-Sec. 5 PROJECT</p>
-                <p>Dr. Abdulla Subah</p>
+                <h3>Coding Yaar</h3>
+                <p>321, Lorem ipsum dolor sit amet.</p>
+                <p>0987654321</p>
             </div>
             <div class="col-md-4">
                 <h4>Menu</h4>
                 <ul class="list-unstyled">
-                    <li><a href="../index.html" class="text-light text-decoration-none">Home</a></li>
-                    <li><a href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/" class="text-light text-decoration-none">About</a></li>
-                    <li><a href="https://github.com/mazen-11/ITCS333Project/tree/main" class="text-light text-decoration-none">Contact</a></li>
+                    <li><a href="#" class="text-light text-decoration-none">Home</a></li>
+                    <li><a href="#" class="text-light text-decoration-none">About</a></li>
+                    <li><a href="#" class="text-light text-decoration-none">Contact</a></li>
                 </ul>
             </div>
             <div class="col-md-4">
@@ -74,14 +74,77 @@
         </div>
         <hr>
         <div class="d-flex justify-content-between py-1">
-            <p>G6 Project. All Rights Reserved.</p>
+            <p>2023 © Coding Yaar. All Rights Reserved.</p>
             <p>
                 <a href="#" class="text-light text-decoration-none">Terms of Use</a>
                 <a href="#" class="text-light text-decoration-none ms-3">Privacy Policy</a>
             </p>
         </div>
     </div>
-  </footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const params = new URLSearchParams(window.location.search);
+      const newsId = params.get('id');
+      const newsList = JSON.parse(localStorage.getItem('campusNews')) || [];
+      
+      if (newsId === null || !newsList[newsId]) {
+        document.querySelector('.container').innerHTML = '<h2>News not found.</h2>';
+        return;
+      }
+    
+      const news = newsList[newsId];
+     
+      document.querySelector('.news-detail-title').textContent = news.title;
+      document.querySelector('.text-muted').textContent = `Category: ${news.category} | ${news.date}`;
+      document.querySelector('.main-news-image').src = 'https://via.placeholder.com/800x300';
+      document.querySelector('.container p').textContent = news.content;
+    
+      const commentSection = document.querySelector('.mt-5');
+      news.comments.forEach(comment => {
+        const div = document.createElement('div');
+        div.className = 'bg-light p-3 rounded mb-2 comment-box';
+        div.textContent = comment;
+        commentSection.insertBefore(div, commentSection.querySelector('textarea'));
+      });
+    
+      
+      const textarea = document.querySelector('textarea');
+      textarea.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          const newComment = textarea.value.trim();
+          if (newComment) {
+            news.comments.push(newComment);
+            localStorage.setItem('campusNews', JSON.stringify(newsList));
+            location.reload();
+          }
+        }
+      });
+    
+      
+      document.querySelector('.btn-danger').addEventListener('click', function() {
+        if (confirm('Are you sure you want to delete this news?')) {
+          newsList.splice(newsId, 1);
+          localStorage.setItem('campusNews', JSON.stringify(newsList));
+          window.location.href = 'index.html';
+        }
+      });
+    
+      
+      document.querySelector('.btn-warning').addEventListener('click', function() {
+        const newTitle = prompt('Edit title:', news.title);
+        const newContent = prompt('Edit content:', news.content);
+        if (newTitle && newContent) {
+          news.title = newTitle;
+          news.content = newContent;
+          localStorage.setItem('campusNews', JSON.stringify(newsList));
+          location.reload();
+        }
+      });
+    });
+    </script>
+    
+
 </body>
 </html>
