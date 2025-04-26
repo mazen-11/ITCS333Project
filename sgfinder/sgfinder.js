@@ -1,9 +1,8 @@
 // Global variables
-let allGroups = [];       // ← Now correctly loaded!
+let allGroups = [];
 let currentGroups = [];
 let currentPage = 1;
 const groupsPerPage = 6;
-
 
 // Safe JSON Parsing
 function safeParse(json) {
@@ -14,7 +13,7 @@ function safeParse(json) {
     }
 }
 
-// Example Groups
+// Example groups
 function getExampleGroups() {
     return [
         { id: '1', name: 'Introduction to Algorithms', courseCode: 'CS201', college: 'Engineering', department: 'Computer Science', link: '#' },
@@ -32,28 +31,25 @@ function initializeFinderPage() {
 
         if (!searchField || !searchFilter || !searchButton || !showAllButton) return;
 
-        // Load groups into memory
         const customGroups = safeParse(localStorage.getItem('customGroups'));
         const exampleGroups = getExampleGroups();
         allGroups = [...exampleGroups, ...customGroups];
         currentGroups = [...allGroups];
-       
 
-        // ✅ Fix Show All Button
         showAllButton.addEventListener('click', () => {
             searchField.value = '';
             currentPage = 1;
             currentGroups = [...allGroups];
-            displayGroups(currentGroups);  
+            displayGroups(currentGroups);
         });
 
-        // ✅ Fix Search Button
         searchButton.addEventListener('click', () => {
             const query = searchField.value;
             const filter = searchFilter.value;
             searchGroups(query, filter);
         });
 
+        
     } catch (error) {
         console.error('Error initializing finder page:', error);
     }
@@ -73,8 +69,7 @@ function fetchMyGroups() {
 
         setTimeout(() => {
             displayMyGroups(myGroups);
-            
-        }, 1000);
+        }, 500);
     } catch (error) {
         console.error('Error fetching groups:', error);
         myGroupsContainer.innerHTML = `<div class="text-center">
@@ -83,7 +78,46 @@ function fetchMyGroups() {
     }
 }
 
-// Display Groups (for Find Groups page)
+// Initialize Create Group Page
+function initializeCreateGroupPage() {
+    const form = document.querySelector('form');
+
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const groupName = document.getElementById('group-name').value.trim();
+        const courseCode = document.getElementById('course-code').value.trim();
+        const department = document.getElementById('department').value.trim();
+        const college = document.getElementById('college').value.trim();
+
+        if (!groupName || !courseCode || !department || !college) {
+            alert("Please fill in all fields!");
+            return;
+        }
+
+        const customGroups = safeParse(localStorage.getItem('customGroups')) || [];
+
+        const newGroup = {
+            id: Date.now().toString(),
+            name: groupName,
+            courseCode: courseCode,
+            college: college,
+            department: department,
+            link: "#"
+        };
+
+        customGroups.push(newGroup);
+
+        localStorage.setItem('customGroups', JSON.stringify(customGroups));
+
+        // Redirect after saving
+        window.location.href = 'my-groups.html';
+    });
+}
+
+// Display Groups (Find Groups page)
 function displayGroups(groups) {
     const groupsContainer = document.getElementById('groupsContainer');
     const paginationContainer = document.getElementById('paginationContainer');
@@ -102,11 +136,9 @@ function displayGroups(groups) {
     groupsContainer.innerHTML = '';
 
     if (groupsToDisplay.length === 0) {
-        groupsContainer.innerHTML = `
-            <div class="col-12 text-center">
-                <p>No study groups found matching your criteria.</p>
-            </div>
-        `;
+        groupsContainer.innerHTML = `<div class="col-12 text-center">
+            <p>No study groups found matching your criteria.</p>
+        </div>`;
         paginationContainer.innerHTML = '';
         return;
     }
@@ -131,7 +163,7 @@ function displayGroups(groups) {
     createPagination(totalPages);
 }
 
-// Display My Groups (for My Groups page)
+// Display My Groups (My Groups page)
 function displayMyGroups(groups) {
     const myGroupsContainer = document.getElementById('myGroupsContainer');
     if (!myGroupsContainer) return;
@@ -139,12 +171,10 @@ function displayMyGroups(groups) {
     myGroupsContainer.innerHTML = '';
 
     if (groups.length === 0) {
-        myGroupsContainer.innerHTML = `
-            <div class="text-center">
-                <p>You haven't joined any study groups yet.</p>
-                <a href="sgfinder.html" class="btn btn-primary">Find Groups</a>
-            </div>
-        `;
+        myGroupsContainer.innerHTML = `<div class="text-center">
+            <p>You haven't joined any study groups yet.</p>
+            <a href="sgfinder.html" class="btn btn-primary">Find Groups</a>
+        </div>`;
         return;
     }
 
@@ -155,11 +185,6 @@ function displayMyGroups(groups) {
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start">
                     <h5 class="card-title fw-bold">${group.name}</h5>
-                    ${
-                        group.id.toString().length > 5
-                            ? `<button class="btn btn-danger btn-sm" data-id="${group.id}">Delete</button>`
-                            : ''
-                    }
                 </div>
                 <hr>
                 <p class="card-text"><strong>Course Code:</strong> ${group.courseCode}</p>
@@ -169,13 +194,6 @@ function displayMyGroups(groups) {
             </div>
         `;
         myGroupsContainer.appendChild(groupCard);
-    });
-
-    myGroupsContainer.querySelectorAll('button[data-id]').forEach(button => {
-        button.addEventListener('click', () => {
-            const groupId = button.getAttribute('data-id');
-            deleteCustomGroup(groupId);
-        });
     });
 }
 
@@ -242,7 +260,7 @@ function searchGroups(query, filter) {
         if (!query) {
             currentPage = 1;
             currentGroups = [...allGroups];
-            displayGroups(currentGroups);  // ✅ Must display
+            displayGroups(currentGroups);
             return;
         }
 
@@ -267,37 +285,14 @@ function searchGroups(query, filter) {
 
         currentPage = 1;
         currentGroups = [...filteredGroups];
-        displayGroups(currentGroups); 
+        displayGroups(currentGroups);
 
     } catch (error) {
         console.error('Error searching groups:', error);
     }
 }
 
-
-
-// Delete Custom Group
-function deleteCustomGroup(groupId) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: 'Do you want to delete this group?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            let customGroups = safeParse(localStorage.getItem('customGroups'));
-            customGroups = customGroups.filter(group => group.id.toString() !== groupId);
-            localStorage.setItem('customGroups', JSON.stringify(customGroups));
-            fetchMyGroups();
-           
-        }
-    });
-}
-
-// Show Loading Spinner
+// Loading spinner
 function showLoading(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -311,23 +306,7 @@ function showLoading(containerId) {
     `;
 }
 
-// Error helpers
-function showError(input, message) {
-    clearError(input);
-    const errorElement = document.createElement('div');
-    errorElement.className = 'invalid-feedback d-block';
-    errorElement.textContent = message;
-    input.classList.add('is-invalid');
-    input.parentNode.appendChild(errorElement);
-}
-
-function clearError(input) {
-    input.classList.remove('is-invalid');
-    const errorElement = input.parentNode.querySelector('.invalid-feedback');
-    if (errorElement) errorElement.remove();
-}
-
-
+// DOMContentLoaded - initialize based on page
 document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
 
@@ -335,6 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initializeFinderPage();
     } else if (path.includes('my-groups.html')) {
         fetchMyGroups();
+    } else if (path.includes('create-group.html')) {
+        initializeCreateGroupPage();
     }
 });
-
