@@ -44,34 +44,37 @@
         <!-- Product Name -->
         <div class="mb-3">
             <label for="eventName" class="form-label">Event's Name</label>
-            <input type="text" class="form-control" id="eventName" placeholder="Enter event name">
+            <input type="text" class="form-control" id="eventName" placeholder="Enter event name" required>
         </div>
 
         <!-- Event's time selector -->
         <div class="mb-3">
             <label for="event-time">Time:</label>
             <br>
-                <input type="time" id="eventTime" name="eventTime" required>
+                <input type="time" id="eventTime" name="eventTime" required><br>
+            <label for="eventFinishTime">Finish time:</label>
+            <br>
+                <input type="time" id="eventFinishTime" name="eventFinishTime" required>
             </select>
         </div>
 
         <!-- Event's Date -->
         <div class="mb-3">
-            <label for="event-date">Date:</label>
+            <label for="eventDate">Date:</label>
             <br>
-                <input type="date" id="event-date" name="event-date" required>
+                <input type="date" id="eventDate" name="eventDate" required>
         </div>
 
         <!-- Event's Place -->
         <div class="mb-3">
-            <label for="place" class="form-label">Event's Location:</label>
-            <textarea class="form-control" id="EventPlace" rows="3" placeholder="Enter where the event will be held"></textarea>
+            <label for="EventPlace" class="form-label">Event's Location:</label>
+            <textarea class="form-control" id="EventPlace" rows="3" placeholder="Enter where the event will be held" required></textarea>
         </div>
 
-        <!-- Description -->
+        <!-- eventDescription -->
         <div class="mb-3">
-            <label for="Description" class="form-label">Event's Description:</label>
-            <textarea class="form-control" id="description" rows="5" placeholder="Enter a description for the event"></textarea>
+            <label for="eventeventDescription" class="form-label">Event's eventDescription:</label>
+            <textarea class="form-control" id="eventDescription" rows="5" placeholder="Enter a description for the event" required></textarea>
         </div>
 
 
@@ -88,7 +91,7 @@
           <button type="submit" class="btn btn-primary">Submit</button>
       </div>
         <!-- Remove Button -->
-      <a style="background-color: red;" href="#" class="btn btn-primary">Remove event</a>
+      <button style="background-color: red;" href="#" class="btn btn-primary">Remove event</button>
     </form>
 </div>
 <br>
@@ -136,6 +139,9 @@
 
 <!-- Bootstrap Script -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Form Handler -->
+<script src="formHandler.js"></script>
 
 </body>
 </html>
