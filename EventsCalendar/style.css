@@ -12,7 +12,7 @@ body {
   a:hover {
     text-decoration: none;
   }
- 
+  
   .dropdown-item .btn{
     background-color: rgba(var(--bs-dark-rgb),var(--bs-bg-opacity))!important;
     margin-top: 10px;
@@ -21,67 +21,29 @@ body {
   .dropdown-item .form-control{
     margin-top: 10px;
   }
-
-  .services-section {
-    margin: auto;
-    margin-top: 20px;
-    margin-bottom: 50px;
-    width: 100%;
-    height: auto;
-    padding: 20px;
-
+  
+  .col-md-4 .card .card-img-top{
+  max-height: 260px;
   }
   
-  .services-section .row {
-    display: flex;
-    justify-content: center;
-  }
   
-  .col-md-4{
-    margin: 10px 0px;
-  }
-
-
-  .services-section .card {
-
-margin-top: 10px;
-  }
-  
-
-
-
   footer {
     margin-top: 20px;
   }
-
-
+  
+  
   .product-image {
+    max-height: 400px;
     object-fit: cover;
-}
-.thumbnail {
+  }
+  .thumbnail {
     width: 80px;
     height: 80px;
     object-fit: cover;
     cursor: pointer;
     opacity: 0.6;
     transition: opacity 0.3s ease;
-}
-.thumbnail:hover, .thumbnail.active {
+  }
+  .thumbnail:hover, .thumbnail.active {
     opacity: 1;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-a:hover {
-    text-decoration: none;
-}
-
-/* Styling for input sections */
-.p-3.border.rounded {
-    background-color: #fff;
-    padding: 15px;
-    border-radius: 5px;
-}
+  }
