@@ -4,129 +4,103 @@ let currentGroups = [];
 let currentPage = 1;
 const groupsPerPage = 6;
 
-// Safe JSON Parsing
-function safeParse(json) {
-    try {
-        return JSON.parse(json) || [];
-    } catch (e) {
-        return [];
-    }
-}
-
-// Example groups
-function getExampleGroups() {
-    return [
-        { id: '1', name: 'Introduction to Algorithms', courseCode: 'CS201', college: 'Engineering', department: 'Computer Science', link: '#' },
-        { id: '2', name: 'Organic Chemistry Study Group', courseCode: 'CHEM210', college: 'Science', department: 'Chemistry', link: '#' }
-    ];
-}
-
-// Initialize Finder Page
-function initializeFinderPage() {
-    try {
-        const searchField = document.getElementById('search-field');
-        const searchFilter = document.getElementById('searchFilter');
-        const searchButton = document.querySelector('.btn-dark');
-        const showAllButton = document.querySelector('.btn-success');
-
-        if (!searchField || !searchFilter || !searchButton || !showAllButton) return;
-
-        const customGroups = safeParse(localStorage.getItem('customGroups'));
-        const exampleGroups = getExampleGroups();
-        allGroups = [...exampleGroups, ...customGroups];
-        currentGroups = [...allGroups];
-
-        showAllButton.addEventListener('click', () => {
-            searchField.value = '';
-            currentPage = 1;
-            currentGroups = [...allGroups];
-            displayGroups(currentGroups);
-        });
-
-        searchButton.addEventListener('click', () => {
-            const query = searchField.value;
-            const filter = searchFilter.value;
-            searchGroups(query, filter);
-        });
-
-        
-    } catch (error) {
-        console.error('Error initializing finder page:', error);
-    }
-}
-
-// Initialize My Groups Page
-function fetchMyGroups() {
-    const myGroupsContainer = document.getElementById('myGroupsContainer');
-    if (!myGroupsContainer) return;
-
-    try {
-        showLoading('myGroupsContainer');
-
-        const customGroups = safeParse(localStorage.getItem('customGroups'));
-        const exampleGroups = getExampleGroups();
-        const myGroups = [...exampleGroups, ...customGroups];
-
-        setTimeout(() => {
-            displayMyGroups(myGroups);
-        }, 500);
-    } catch (error) {
-        console.error('Error fetching groups:', error);
-        myGroupsContainer.innerHTML = `<div class="text-center">
-            <p class="text-danger">Failed to load your study groups. Please try again later.</p>
-        </div>`;
-    }
-}
-
-// Initialize Create Group Page
 function initializeCreateGroupPage() {
     const form = document.querySelector('form');
-
     if (!form) return;
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const groupName = document.getElementById('group-name').value.trim();
         const courseCode = document.getElementById('course-code').value.trim();
         const department = document.getElementById('department').value.trim();
         const college = document.getElementById('college').value.trim();
+        const now = new Date().toISOString().slice(0, 19).replace("T", " ");
 
         if (!groupName || !courseCode || !department || !college) {
             alert("Please fill in all fields!");
             return;
         }
 
-        const customGroups = safeParse(localStorage.getItem('customGroups')) || [];
-
-        const newGroup = {
-            id: Date.now().toString(),
-            name: groupName,
-            courseCode: courseCode,
-            college: college,
-            department: department,
-            link: "#"
+        const groupData = {
+            CourseName: groupName,
+            CourseCode: courseCode,
+            Department: department,
+            College: college,
+            date: now
         };
 
-        customGroups.push(newGroup);
+        try {
+            console.log("groupName:", groupName);
+console.log("courseCode:", courseCode);
+console.log("department:", department);
+console.log("college:", college);
+console.log("now:", now);
 
-        localStorage.setItem('customGroups', JSON.stringify(customGroups));
-
-        // Redirect after saving
-        window.location.href = 'my-groups.html';
+            console.log("Payload being sent:", JSON.stringify(groupData)); // DEBUG LINE 👈
+        
+            const res = await fetch("/sgfinder/api/create.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(groupData)
+            });
+        
+            const result = await res.json();
+            console.log("Server response:", result); // DEBUG LINE 👈
+        
+            if (result.success) {
+                alert("Study group created successfully!");
+                // window.location.href = "my-groups.html";
+            } else {
+                alert("Failed to create group: " + (result.error || "Unknown error"));
+            }
+        } catch (err) {
+            console.error("Error:", err);
+            alert("Something went wrong.");
+        }
+        
     });
 }
 
-// Display Groups (Find Groups page)
+function fetchMyGroups() {
+    const myGroupsContainer = document.getElementById('myGroupsContainer');
+    if (!myGroupsContainer) return;
+
+    showLoading('myGroupsContainer');
+
+    fetch("/sgfinder/api/list.php")
+        .then(res => res.json())
+        .then(data => {
+            displayMyGroups(data);
+        })
+        .catch(err => {
+            console.error("Failed to load groups:", err);
+            myGroupsContainer.innerHTML = `<div class="text-center">
+                <p class="text-danger">Failed to load your study groups. Please try again later.</p>
+            </div>`;
+        });
+}
+
+function initializeFinderPage() {
+    fetch("/sgfinder/api/list.php")
+        .then(res => res.json())
+        .then(data => {
+            allGroups = data;
+            currentGroups = [...allGroups];
+            displayGroups(currentGroups);
+        })
+        .catch(err => {
+            console.error("Failed to load groups:", err);
+        });
+}
+
 function displayGroups(groups) {
     const groupsContainer = document.getElementById('groupsContainer');
     const paginationContainer = document.getElementById('paginationContainer');
-
     if (!groupsContainer) return;
 
     currentGroups = groups;
     const totalPages = Math.ceil(groups.length / groupsPerPage);
-
     if (currentPage > totalPages) currentPage = totalPages || 1;
 
     const startIndex = (currentPage - 1) * groupsPerPage;
@@ -149,11 +123,11 @@ function displayGroups(groups) {
         groupCard.innerHTML = `
             <div class="card h-100">
                 <div class="card-body">
-                    <h5 class="card-title">${group.name}</h5>
-                    <p class="card-text">Course Code: ${group.courseCode}</p>
-                    <p class="card-text">College: ${group.college}</p>
-                    <p class="card-text">Department: ${group.department}</p>
-                    <a href="${group.link}" class="btn btn-primary">Join Group</a>
+                    <h5 class="card-title">${group.CourseName}</h5>
+                    <p class="card-text">Course Code: ${group.CourseCode}</p>
+                    <p class="card-text">College: ${group.College}</p>
+                    <p class="card-text">Department: ${group.Department}</p>
+                    <a href="#" class="btn btn-primary">Join Group</a>
                 </div>
             </div>
         `;
@@ -163,7 +137,6 @@ function displayGroups(groups) {
     createPagination(totalPages);
 }
 
-// Display My Groups (My Groups page)
 function displayMyGroups(groups) {
     const myGroupsContainer = document.getElementById('myGroupsContainer');
     if (!myGroupsContainer) return;
@@ -183,38 +156,31 @@ function displayMyGroups(groups) {
         groupCard.className = 'card mb-3';
         groupCard.innerHTML = `
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start">
-                    <h5 class="card-title fw-bold">${group.name}</h5>
-                </div>
-                <hr>
-                <p class="card-text"><strong>Course Code:</strong> ${group.courseCode}</p>
-                <p class="card-text"><strong>College:</strong> ${group.college}</p>
-                <p class="card-text"><strong>Department:</strong> ${group.department}</p>
-                <a href="${group.link}" class="btn btn-primary btn-sm" target="_blank">Join Group</a>
+                <h5 class="card-title">${group.CourseName}</h5>
+                <p class="card-text">Course Code: ${group.CourseCode}</p>
+                <p class="card-text">College: ${group.College}</p>
+                <p class="card-text">Department: ${group.Department}</p>
+                <p><a href="#">Group link</a></p>
             </div>
         `;
         myGroupsContainer.appendChild(groupCard);
     });
 }
 
-// Create Pagination
 function createPagination(totalPages) {
     const paginationContainer = document.getElementById('paginationContainer');
     if (!paginationContainer) return;
 
     paginationContainer.innerHTML = '';
-
     if (totalPages <= 1) return;
 
     const pagination = document.createElement('nav');
-    pagination.setAttribute('aria-label', 'Study groups pagination');
-
     const paginationList = document.createElement('ul');
     paginationList.className = 'pagination';
 
     const prevItem = document.createElement('li');
     prevItem.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
-    prevItem.innerHTML = `<a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a>`;
+    prevItem.innerHTML = `<a class="page-link" href="#">«</a>`;
     prevItem.addEventListener('click', (e) => {
         e.preventDefault();
         if (currentPage > 1) {
@@ -238,7 +204,7 @@ function createPagination(totalPages) {
 
     const nextItem = document.createElement('li');
     nextItem.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
-    nextItem.innerHTML = `<a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a>`;
+    nextItem.innerHTML = `<a class="page-link" href="#">»</a>`;
     nextItem.addEventListener('click', (e) => {
         e.preventDefault();
         if (currentPage < totalPages) {
@@ -252,47 +218,6 @@ function createPagination(totalPages) {
     paginationContainer.appendChild(pagination);
 }
 
-// Search Groups
-function searchGroups(query, filter) {
-    try {
-        query = query.toLowerCase().trim();
-
-        if (!query) {
-            currentPage = 1;
-            currentGroups = [...allGroups];
-            displayGroups(currentGroups);
-            return;
-        }
-
-        let filteredGroups = [];
-
-        switch (filter) {
-            case 'course-name':
-                filteredGroups = allGroups.filter(group => group.name.toLowerCase().includes(query));
-                break;
-            case 'course-code':
-                filteredGroups = allGroups.filter(group => group.courseCode.toLowerCase().includes(query));
-                break;
-            case 'college':
-                filteredGroups = allGroups.filter(group => group.college.toLowerCase().includes(query));
-                break;
-            case 'department':
-                filteredGroups = allGroups.filter(group => group.department.toLowerCase().includes(query));
-                break;
-            default:
-                filteredGroups = allGroups;
-        }
-
-        currentPage = 1;
-        currentGroups = [...filteredGroups];
-        displayGroups(currentGroups);
-
-    } catch (error) {
-        console.error('Error searching groups:', error);
-    }
-}
-
-// Loading spinner
 function showLoading(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -306,10 +231,9 @@ function showLoading(containerId) {
     `;
 }
 
-// DOMContentLoaded - initialize based on page
+// DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
-
     if (path.includes('sgfinder.html')) {
         initializeFinderPage();
     } else if (path.includes('my-groups.html')) {
