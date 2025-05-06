@@ -1,15 +1,11 @@
 <?php
 require_once '../db.php';
+header('Content-Type: application/json');
 
-
-$limit = isset($_GET['limit']) ? (int) $_GET['limit'] : 10;
-$offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
-
-$stmt = $pdo->prepare("SELECT * FROM study_groups ORDER BY created_at DESC LIMIT :limit OFFSET :offset");
-$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-$stmt->execute();
-
-$groups = $stmt->fetchAll();
-echo json_encode($groups);
-?>
+try {
+    $stmt = $pdo->query("SELECT * FROM study_groups ORDER BY created_at DESC");
+    echo json_encode($stmt->fetchAll());
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Database error', 'details' => $e->getMessage()]);
+}
