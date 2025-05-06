@@ -5,6 +5,8 @@ let currentPage = 1;
 const groupsPerPage = 6;
 
 function initializeCreateGroupPage() {
+    console.log("Form listener attached"); // Add this
+
     const form = document.querySelector('form');
     if (!form) return;
 
@@ -32,14 +34,14 @@ function initializeCreateGroupPage() {
 
         try {
             console.log("groupName:", groupName);
-console.log("courseCode:", courseCode);
-console.log("department:", department);
-console.log("college:", college);
-console.log("now:", now);
+            console.log("courseCode:", courseCode);
+            console.log("department:", department);
+            console.log("college:", college);
+            console.log("now:", now);
 
             console.log("Payload being sent:", JSON.stringify(groupData)); // DEBUG LINE 👈
         
-            const res = await fetch("/sgfinder/api/create.php", {
+            const res = await fetch("/ITCS333Project/sgfinder/api/create.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(groupData)
@@ -49,8 +51,8 @@ console.log("now:", now);
             console.log("Server response:", result); // DEBUG LINE 👈
         
             if (result.success) {
-                alert("Study group created successfully!");
-                // window.location.href = "my-groups.html";
+         
+                 window.location.href = "my-groups.html";
             } else {
                 alert("Failed to create group: " + (result.error || "Unknown error"));
             }
@@ -58,6 +60,7 @@ console.log("now:", now);
             console.error("Error:", err);
             alert("Something went wrong.");
         }
+        
         
     });
 }
@@ -68,7 +71,7 @@ function fetchMyGroups() {
 
     showLoading('myGroupsContainer');
 
-    fetch("/sgfinder/api/list.php")
+    fetch("/ITCS333Project/sgfinder/api/list.php")
         .then(res => res.json())
         .then(data => {
             displayMyGroups(data);
@@ -82,7 +85,7 @@ function fetchMyGroups() {
 }
 
 function initializeFinderPage() {
-    fetch("/sgfinder/api/list.php")
+    fetch("/ITCS333Project/sgfinder/api/search.php")
         .then(res => res.json())
         .then(data => {
             allGroups = data;
