@@ -1,27 +1,28 @@
 <?php
 require_once '../db.php';
+header('Content-Type: application/json');
 
-
-$id = $_GET['id'] ?? null;
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!$id || empty($data)) {
+if (!isset($data['id'], $data['CourseName'], $data['CourseCode'], $data['Department'], $data['date'], $data['College'])) {
     http_response_code(400);
-    echo json_encode(['error' => 'Invalid input']);
+    echo json_encode(['error' => 'Missing required fields']);
     exit;
 }
 
-$fields = [];
-$params = [];
-foreach ($data as $key => $value) {
-    $fields[] = "$key = ?";
-    $params[] = htmlspecialchars($value);
+try {
+    $stmt = $pdo->prepare("UPDATE study_groups SET CourseName = ?, CourseCode = ?, Department = ?, date = ?, College = ? WHERE id = ?");
+    $stmt->execute([
+        htmlspecialchars($data['CourseName']),
+        htmlspecialchars($data['CourseCode']),
+        htmlspecialchars($data['Department']),
+        $data['date'],
+        htmlspecialchars($data['College']),
+        $data['id']
+    ]);
+
+    echo json_encode(['success' => true]);
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Database error', 'details' => $e->getMessage()]);
 }
-$params[] = $id;
-
-$sql = "UPDATE study_groups SET " . implode(', ', $fields) . " WHERE id = ?";
-$stmt = $pdo->prepare($sql);
-$stmt->execute($params);
-
-echo json_encode(['success' => true]);
-?>

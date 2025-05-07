@@ -1,11 +1,9 @@
 <?php
-file_put_contents(__DIR__ . "/debug.txt", "CREATE.php called at " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
-
 require_once '../db.php';
 
-$data = json_decode(file_get_contents("php://input"), true);
+header('Content-Type: application/json');
 
-file_put_contents(__DIR__ . "/debug.json", json_encode($data, JSON_PRETTY_PRINT));
+$data = json_decode(file_get_contents("php://input"), true);
 
 if (!isset($data['CourseName'], $data['CourseCode'], $data['Department'], $data['date'], $data['College'])) {
     http_response_code(400);
