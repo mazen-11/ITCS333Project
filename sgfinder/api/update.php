@@ -13,11 +13,11 @@ if (!isset($data['id'], $data['CourseName'], $data['CourseCode'], $data['Departm
 try {
     $stmt = $pdo->prepare("UPDATE study_groups SET CourseName = ?, CourseCode = ?, Department = ?, date = ?, College = ? WHERE id = ?");
     $stmt->execute([
-        htmlspecialchars($data['CourseName']),
-        htmlspecialchars($data['CourseCode']),
-        htmlspecialchars($data['Department']),
+        $data['CourseName'],
+        $data['CourseCode'],
+        $data['Department'],
         $data['date'],
-        htmlspecialchars($data['College']),
+        $data['College'],
         $data['id']
     ]);
 
