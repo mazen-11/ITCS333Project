@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +13,7 @@
 </head>
 <body>
 
+  
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Navbar</a>
@@ -34,7 +38,7 @@
                             <form id="filter-form">
                             <li><a class="dropdown-item">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Services" id="flexCheckIndeterminate">
+                                    <input class="form-check-input" type="checkbox" value="service" id="flexCheckIndeterminate">
                                     <label class="form-check-label" for="flexCheckIndeterminate">
                                       Services
                                     </label>
@@ -43,7 +47,7 @@
                         </li>
                         <li><a class="dropdown-item">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="Products" id="flexCheckIndeterminate">
+                                <input class="form-check-input" type="checkbox" value="product" id="flexCheckIndeterminate">
                                 <label class="form-check-label" for="flexCheckIndeterminate">
                                     Products
                                 </label>
@@ -54,7 +58,7 @@
     
                     <li><a class="dropdown-item">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="notes" id="flexCheckIndeterminate">
+                            <input class="form-check-input" type="checkbox" value="notesforsale" id="flexCheckIndeterminate">
                             <label class="form-check-label" for="flexCheckIndeterminate">
                               notes for sale
                             </label>
@@ -63,7 +67,7 @@
                 </li>
                 <li><a class="dropdown-item">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="Private-teacher" id="flexCheckIndeterminate">
+                        <input class="form-check-input" type="checkbox" value="Privateteacher" id="flexCheckIndeterminate">
                         <label class="form-check-label" for="flexCheckIndeterminate">
                           Private teacher
                         </label>
@@ -73,7 +77,7 @@
                 
             <li><a class="dropdown-item">
                 <div class="container-fluid justify-content-center">
-                        <button class="btn btn-outline-dark" type="submit">appaly filter</button>
+                <button class="btn btn-outline-dark" type="submit">Apply filter</button>
                 </div>
             </a>
         </li>
@@ -94,7 +98,7 @@
 <nav class="navbar bg-dark navbar-dark">
     <div class="container-fluid justify-content-center">
         <form class="d-flex w-75" role="search" id="search">
-            <input class="form-control me-2" type="search" placeholder="Search">
+            <input class="form-control me-2" type="search" placeholder="Search by code">
             <button class="btn btn-outline-light" type="submit">Search</button>
         </form>
     </div>
@@ -102,52 +106,8 @@
 
 <!-- Content Section -->
 <main class="services-section container">
-  <div class="row g-4"> <!-- Add g-4 for spacing -->
-
-        <div class="col-md-4" id="Private-teacher">
-            <div class="card">
-                <img src="https://www.myprivatetutor.bh/public/frontend/images/landing_pages/small/learner_illustration_small.png?v=1689915397" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">private teacher for calculas</h5>
-                    <p class="card-text">100$</p>
-                    <a href="products-and-services/product-page.html" class="btn btn-primary">check for mor details</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4" id="Products">
-            <div class="card">
-                <img src="https://cdn.create.vista.com/downloads/0d30a8f9-5148-4e68-8e01-99258835b87f_1024.jpeg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">maths book for sale</h5>
-                    <p class="card-text">50$</p>
-                    <a href="products-and-services/product-page.html" class="btn btn-primary">check for mor details</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4" id="notes">
-            <div class="card">
-                <img src="https://help.artsonia.com/hc/article_attachments/115000812754/QR.png" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">home work access code not used</h5>
-                    <p class="card-text">20$</p>
-                    <a href="products-and-services/product-page.html" class="btn btn-primary">check for mor details</a>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-4" id="Services">
-            <div class="card">
-                <img src="https://help.artsonia.com/hc/article_attachments/115000812754/QR.png" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Solving home work</h5>
-                    <p class="card-text">20$</p>
-                    <a href="products-and-services/product-page.html" class="btn btn-primary">check for mor details</a>
-                </div>
-            </div>
-        </div>
-
-    </div>
+  <!-- Add g-4 for spacing -->
+     <div class="row g-4" id="product-list"></div>
 </main>
 
 <!-- Footer -->
@@ -189,5 +149,7 @@
 <!-- Bootstrap Script -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/main.js"></script>
+<script src="JSONFecth.js"></script>
+
 </body>
 </html>
