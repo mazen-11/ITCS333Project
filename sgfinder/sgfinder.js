@@ -1,12 +1,12 @@
-// Global variables
+const baseURL = "https://d44551b6-7038-4531-a3c7-5527286a5450-00-14ykkwj88rmln.pike.replit.dev/sgfinder";
+
 let allGroups = [];
 let currentGroups = [];
 let currentPage = 1;
 const groupsPerPage = 6;
+let showAllVisible = false;
 
 function initializeCreateGroupPage() {
-    console.log("Form listener attached"); // Add this
-
     const form = document.querySelector('form');
     if (!form) return;
 
@@ -33,26 +33,15 @@ function initializeCreateGroupPage() {
         };
 
         try {
-            console.log("groupName:", groupName);
-            console.log("courseCode:", courseCode);
-            console.log("department:", department);
-            console.log("college:", college);
-            console.log("now:", now);
-
-            console.log("Payload being sent:", JSON.stringify(groupData)); // DEBUG LINE 👈
-        
-            const res = await fetch("/ITCS333Project/sgfinder/api/create.php", {
+            const res = await fetch(`${baseURL}/api/create.php`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(groupData)
             });
-        
+
             const result = await res.json();
-            console.log("Server response:", result); // DEBUG LINE 👈
-        
             if (result.success) {
-         
-                 window.location.href = "my-groups.html";
+                window.location.href = "my-groups.html";
             } else {
                 alert("Failed to create group: " + (result.error || "Unknown error"));
             }
@@ -60,8 +49,6 @@ function initializeCreateGroupPage() {
             console.error("Error:", err);
             alert("Something went wrong.");
         }
-        
-        
     });
 }
 
@@ -71,7 +58,7 @@ function fetchMyGroups() {
 
     showLoading('myGroupsContainer');
 
-    fetch("/ITCS333Project/sgfinder/api/list.php")
+    fetch(`${baseURL}/api/list.php`)
         .then(res => res.json())
         .then(data => {
             displayMyGroups(data);
@@ -81,19 +68,6 @@ function fetchMyGroups() {
             myGroupsContainer.innerHTML = `<div class="text-center">
                 <p class="text-danger">Failed to load your study groups. Please try again later.</p>
             </div>`;
-        });
-}
-
-function initializeFinderPage() {
-    fetch("/ITCS333Project/sgfinder/api/search.php")
-        .then(res => res.json())
-        .then(data => {
-            allGroups = data;
-            currentGroups = [...allGroups];
-            displayGroups(currentGroups);
-        })
-        .catch(err => {
-            console.error("Failed to load groups:", err);
         });
 }
 
@@ -237,11 +211,37 @@ function showLoading(containerId) {
 // DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
-    if (path.includes('sgfinder.html')) {
-        initializeFinderPage();
-    } else if (path.includes('my-groups.html')) {
+
+    if (path.includes('my-groups.html')) {
         fetchMyGroups();
     } else if (path.includes('create-group.html')) {
         initializeCreateGroupPage();
     }
+
+    // Toggle Show All Groups
+    document.getElementById('showAllBtn')?.addEventListener('click', async () => {
+        const container = document.getElementById('groupsContainer');
+        const pagination = document.getElementById('paginationContainer');
+
+        if (!showAllVisible) {
+            try {
+                const res = await fetch(`${baseURL}/api/search.php`);
+                const data = await res.json();
+                currentPage = 1;
+                allGroups = data;
+                currentGroups = [...allGroups];
+                displayGroups(currentGroups);
+                showAllVisible = true;
+                document.getElementById('showAllBtn').textContent = "Hide Groups";
+            } catch (err) {
+                console.error("Failed to fetch all groups:", err);
+                alert("Unable to load groups. Please try again.");
+            }
+        } else {
+            container.innerHTML = '';
+            pagination.innerHTML = '';
+            showAllVisible = false;
+            document.getElementById('showAllBtn').textContent = "Show All Groups";
+        }
+    });
 });
