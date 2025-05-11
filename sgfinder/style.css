@@ -1,0 +1,94 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; /* Light grey background */
+  }
+  
+  a {
+    text-decoration: none;  /* Removes underline */
+    color: inherit;         /* Inherits text color */
+  }
+  
+  a:hover {
+    text-decoration: none;
+  }
+ 
+  .dropdown-item .btn{
+    background-color: rgba(var(--bs-dark-rgb),var(--bs-bg-opacity))!important;
+    margin-top: 10px;
+    color: white;
+  }
+  .dropdown-item .form-control{
+    margin-top: 10px;
+  }
+
+  .services-section {
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    width: 100%;
+    height: auto;
+    padding: 20px;
+
+  }
+  
+  .services-section .row {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .services-section .card {
+
+margin-top: 10px;
+  }
+  
+ .col-md-4 .card .card-img-top{
+  max-height: 260px;
+ }
+
+
+  footer {
+    margin-top: 20px;
+  }
+
+
+  .product-image {
+    max-height: 400px;
+    object-fit: cover;
+}
+.thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+.thumbnail:hover, .thumbnail.active {
+    opacity: 1;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+/* Centered sections */
+.container {
+    max-width: 600px;
+}
+
+/* Styling for input sections */
+.p-3.border.rounded {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+}
