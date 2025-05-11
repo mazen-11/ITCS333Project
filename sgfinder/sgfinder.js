@@ -1,10 +1,8 @@
-const baseURL = "https://d44551b6-7038-4531-a3c7-5527286a5450-00-14ykkwj88rmln.pike.replit.dev/sgfinder";
+const baseURL = "https://5e08408e-bdd1-4bf3-8ee6-83bd2b87ab24-00-15dlgdu3c8ef9.sisko.replit.dev/sgfinder";
 
-let allGroups = [];
 let currentGroups = [];
 let currentPage = 1;
 const groupsPerPage = 6;
-let showAllVisible = false;
 
 function initializeCreateGroupPage() {
     const form = document.querySelector('form');
@@ -17,7 +15,7 @@ function initializeCreateGroupPage() {
         const courseCode = document.getElementById('course-code').value.trim();
         const department = document.getElementById('department').value.trim();
         const college = document.getElementById('college').value.trim();
-        const now = new Date().toISOString().slice(0, 19).replace("T", " ");
+        const now = new Date().toISOString().slice(0, 10);
 
         if (!groupName || !courseCode || !department || !college) {
             alert("Please fill in all fields!");
@@ -218,30 +216,42 @@ document.addEventListener('DOMContentLoaded', () => {
         initializeCreateGroupPage();
     }
 
-    // Toggle Show All Groups
-    document.getElementById('showAllBtn')?.addEventListener('click', async () => {
-        const container = document.getElementById('groupsContainer');
-        const pagination = document.getElementById('paginationContainer');
+    // ✅ Handle Search Button (matches real keys)
+    const searchBtn = document.querySelector('button[type="submit"]');
+    const searchField = document.getElementById('search-field');
+    const filterSelect = document.getElementById('searchFilter');
 
-        if (!showAllVisible) {
-            try {
-                const res = await fetch(`${baseURL}/api/search.php`);
-                const data = await res.json();
-                currentPage = 1;
-                allGroups = data;
-                currentGroups = [...allGroups];
-                displayGroups(currentGroups);
-                showAllVisible = true;
-                document.getElementById('showAllBtn').textContent = "Hide Groups";
-            } catch (err) {
-                console.error("Failed to fetch all groups:", err);
-                alert("Unable to load groups. Please try again.");
+    if (searchBtn && searchField && filterSelect) {
+        searchBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const keyword = searchField.value.trim().toLowerCase();
+            const filter = filterSelect.value;
+
+            if (!keyword) {
+                alert("Please enter a search term.");
+                return;
             }
-        } else {
-            container.innerHTML = '';
-            pagination.innerHTML = '';
-            showAllVisible = false;
-            document.getElementById('showAllBtn').textContent = "Show All Groups";
-        }
-    });
+
+            try {
+                const res = await fetch(`${baseURL}/api/search.php?filter=${filter}&keyword=${encodeURIComponent(keyword)}`);
+                const data = await res.json();
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    document.getElementById('groupsContainer').innerHTML = `
+                        <div class="col-12 text-center">
+                            <p>No study groups found matching your criteria.</p>
+                        </div>`;
+                    document.getElementById('paginationContainer').innerHTML = '';
+                    return;
+                }
+
+                currentPage = 1;
+                displayGroups(data);
+            } catch (err) {
+                console.error("Search failed:", err);
+                alert("Error fetching search results.");
+            }
+        });
+    }
 });
