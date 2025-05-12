@@ -135,10 +135,32 @@ function displayMyGroups(groups) {
                 <p class="card-text">Course Code: ${group.CourseCode}</p>
                 <p class="card-text">College: ${group.College}</p>
                 <p class="card-text">Department: ${group.Department}</p>
-                <p><a href="#">Group link</a></p>
+                <button class="btn btn-danger delete-btn" data-id="${group.id}">Delete</button>
             </div>
         `;
+
         myGroupsContainer.appendChild(groupCard);
+
+        // Delete button event
+        groupCard.querySelector('.delete-btn').addEventListener('click', async (e) => {
+            const groupId = e.target.getAttribute('data-id');
+            if (!confirm("Are you sure you want to delete this group?")) return;
+
+            try {
+                const res = await fetch(`${baseURL}/api/delete.php?id=${groupId}`, {
+                    method: 'DELETE'
+                });
+                const result = await res.json();
+                if (result.success) {
+                    fetchMyGroups();
+                } else {
+                    alert("Failed to delete group.");
+                }
+            } catch (err) {
+                console.error("Delete error:", err);
+                alert("Something went wrong while deleting.");
+            }
+        });
     });
 }
 
@@ -216,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initializeCreateGroupPage();
     }
 
-    // ✅ Handle Search Button (matches real keys)
+    // ✅ Search handler (backend-based)
     const searchBtn = document.querySelector('button[type="submit"]');
     const searchField = document.getElementById('search-field');
     const filterSelect = document.getElementById('searchFilter');
