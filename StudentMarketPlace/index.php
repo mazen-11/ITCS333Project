@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -98,11 +97,12 @@
 <nav class="navbar bg-dark navbar-dark">
     <div class="container-fluid justify-content-center">
         <form class="d-flex w-75" role="search" id="search">
-            <input class="form-control me-2" type="search" placeholder="Search by code">
+            <input class="form-control me-2" type="search" placeholder="Search by name">
             <button class="btn btn-outline-light" type="submit">Search</button>
         </form>
     </div>
 </nav>
+
 
 <!-- Content Section -->
 <main class="services-section container">
@@ -149,7 +149,7 @@
 <!-- Bootstrap Script -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/main.js"></script>
-<script src="JSONFecth.js"></script>
-
+<script src="JSONFetch.js"></script>
+<script src="js/GetProduct.js"></script>
 </body>
 </html>

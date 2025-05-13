@@ -32,8 +32,6 @@ if (!defined('UPLOAD_SQL_INCLUDED')) {
                         case 'Privateteacher':
                             $path = 'https://www.myprivatetutor.bh/public/frontend/images/landing_pages/small/learner_illustration_small.png?v=1689915397';
                             break;
-                        default:
-                            $path = 'default_image.jpg';
                     }
                     
                     // Use parameterized query to prevent SQL injection

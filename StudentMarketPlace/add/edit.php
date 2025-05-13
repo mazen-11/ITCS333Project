@@ -2,8 +2,8 @@
 <?php
 
 try {
-    require_once("PHPMySql/databaseConn.php");
-    require_once("PHPMySql/EditPro.php");
+    require_once("add/PHPMySql/databaseConn.php");
+    require_once("add/PHPMySql/EditPro.php");
     
 
     if (isset($_POST['BTN'])) {
@@ -67,7 +67,7 @@ try {
     <!-- Product ID -->
     <div class="mb-3">
             <label for="ProductServiceName" class="form-label">Product ID to update</label>
-            <input type="number" name="id" class="form-control" id="ProductServiceName" placeholder="Product ID to update">
+            <input type="number"  name="id" class="form-control" id="ProductServiceName" placeholder="Product ID to update">
         </div>
 
         <!-- Product Name -->
@@ -110,5 +110,7 @@ try {
 <!-- Bootstrap Script -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="main.js"></script>
+<script src="EditProduct.js"></script>
+
 </body>
 </html>

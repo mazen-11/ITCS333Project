@@ -1,4 +1,32 @@
-//search code
+    // Filter code using card ID
+    document.addEventListener('DOMContentLoaded', function () {
+    const filterForm = document.getElementById('filter-form');
+
+    filterForm.addEventListener('submit', function (e) {
+        e.preventDefault(); // Stop form from submitting normally
+
+        // Get all selected checkboxes
+        const checkedFilters = Array.from(
+            filterForm.querySelectorAll('input[type="checkbox"]:checked')
+        ).map(cb => cb.value.toLowerCase()); // ensure consistency
+
+        // Get all cards inside the product list
+        const allCards = document.querySelectorAll('#product-list .col-md-4');
+
+        allCards.forEach(card => {
+            const cardType = card.id.toLowerCase(); // match case
+            if (checkedFilters.length === 0 || checkedFilters.includes(cardType)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+    });
+
+
+
+    //search code
   document.addEventListener('DOMContentLoaded', function () {
     const searchForm = document.getElementById('search');
     const searchInput = searchForm.querySelector('input[type="search"]');
@@ -19,10 +47,9 @@
   
       cards.forEach(card => {
         const cardTitle = card.querySelector('.card-title').textContent.toLowerCase();
-        const cardDescription = card.querySelector('.card-text').textContent.toLowerCase();
   
         // Check if the search text matches the title or description
-        if (cardTitle.includes(text) || cardDescription.includes(text)) {
+        if (cardTitle.includes(text)) {
           card.style.display = 'block'; // Show card if text matches
         } else {
           card.style.display = 'none'; // Hide card if text does not match
