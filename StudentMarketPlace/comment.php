@@ -20,13 +20,13 @@ try {
 
         // Try adding the product and show appropriate message
         if (AddPro($UserInputArray)) {
-            echo "<script>alert('data uploaded');</script>";
+            echo "<script>console.log('data uploaded');</script>";
         } else {
-            echo "<script>alert('data is not uploaded, might there some error');</script>";
+            echo "<script>console.log('data is not uploaded, might there some error');</script>";
         }
     }
 } catch (PDOException $e) {
-    echo "<script>alert('there might some error with the database');</script>";
+    echo "<script>console.log('there might some error with the database');</script>";
 }
 ?>
 

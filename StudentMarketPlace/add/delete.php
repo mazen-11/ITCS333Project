@@ -13,12 +13,12 @@ if (isset($_POST['BTN'])) {
         
         // Call the deleteData function
         if (DeletePro($userInputArray)) {
-            echo "<script>alert('Data deleted successfully!');</script>";
+            echo "<script>console.log('Data deleted successfully!');</script>";
         } else {
-            echo "<script>alert('Data deletion failed. Please check if ID exists.');</script>";
+            echo "<script>console.log('Data deletion failed. Please check if ID exists.');</script>";
         }
     } catch (PDOException $e) {
-        echo "<script>alert('Connection failed: " . $e->getMessage() . "');</script>";
+        echo "<script>console.log('Connection failed: " . $e->getMessage() . "');</script>";
     }
 }
 ?>

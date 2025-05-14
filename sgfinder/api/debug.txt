@@ -1,14 +1,8 @@
-CREATE.php called at 2025-05-06 19:50:18
-CREATE.php called at 2025-05-06 19:59:43
-CREATE.php called at 2025-05-06 19:59:43
-CREATE.php called at 2025-05-06 20:02:18
-CREATE.php called at 2025-05-06 20:02:18
-CREATE.php called at 2025-05-06 20:05:51
-CREATE.php called at 2025-05-06 20:05:51
-CREATE.php called at 2025-05-06 20:10:52
-CREATE.php called at 2025-05-06 20:11:37
-CREATE.php called at 2025-05-06 20:12:07
-CREATE.php called at 2025-05-06 20:14:55
-CREATE.php called at 2025-05-06 20:22:22
-CREATE.php called at 2025-05-06 20:28:13
-CREATE.php called at 2025-05-06 20:33:01
+Array
+(
+    [CourseName] => Introduction to Programming
+    [CourseCode] => ITCS113
+    [Department] => Computer Science
+    [College] => Information Technology
+    [date] => 2025-05-12
+)

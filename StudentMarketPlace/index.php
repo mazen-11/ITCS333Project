@@ -22,11 +22,11 @@
             <div class="navbar-collapse collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../EventsCalendar/eventsPage.html">Event Calendar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../EventsCalendar/eventsPage.php">Event Calendar</a></li>
                     <li class="nav-item"><a class="nav-link" href="../sgfinder/sgfinder.html">Study Group Finder</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../Course_review/index.html">Course Reviews</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../CourseNotes/index.html">Course Notes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../campus-news/index.html">Campus News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../Course_review/index.php">Course Reviews</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../CourseNotes/index.php">Course Notes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../campus-news/index.php">Campus News</a></li>
                     <li class="nav-item"><a class="nav-link" href="add/add-service.html">Add Proudects or Services</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">filter by</a>
@@ -98,7 +98,6 @@
     <div class="container-fluid justify-content-center">
         <form class="d-flex w-75" role="search" id="search">
             <input class="form-control me-2" type="search" placeholder="Search by name">
-            <button class="btn btn-outline-light" type="submit">Search</button>
         </form>
     </div>
 </nav>
