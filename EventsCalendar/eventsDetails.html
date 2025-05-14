@@ -39,22 +39,21 @@
     <div class="row">
         <!-- Events Image -->
         <div class="col-md-6 mb-4">
-            <img src="https://blog.pango.education/hubfs/Coding%20Blog%20Image.jpg" class="card-img-top" alt="..." >
+            <img id="event-image" src="" class="card-img-top" alt="Event Image" width="546" height="364">
         </div>
 
         <!-- Events Details -->
         <div class="col-md-6">
-            <h2 class="mb-3">Coding Hackathon</h2>
-            
-            <p class="mb-4">The Coding Hackathon is a 4-hour competition where participants—whether experienced programmers or beginners—solve real-world challenges, build innovative applications, and develop future-ready solutions. The event includes workshops led by experts, exciting problem statements, prizes for top performers, and opportunities to network with peers and mentors. It's a chance to showcase technical skills, collaborate, and push boundaries in an electrifying coding marathon. All of that and attractive prizes and goodies for top performers.</p>       
-                <h5>More Information About the Event:</h5>
-                <ul>
-                    <li>Time: 8:00-12:00</li>
-                    <li>Date: March 24</li>
-                    <li>Location: S40-13</li>
-                </ul>
+            <h2 class="mb-3" id="event-title"></h2>
+            <p class="mb-4" id="event-description"></p>
+            <h5>More Information About the Event:</h5>
+            <ul>
+                <li>Start Time: <span id="event-start-time"></span></li>
+                <li>Finish Time: <span id="event-end-time"></span></li>
+                <li>Date: <span id="event-date"></span></li>
+                <li>Location: <span id="event-location"></span></li>
+            </ul>
         </div>
-
 
         <div class="comments-section">
             <h3>Comments <span id="comment-count">(0)</span></h3>
@@ -77,49 +76,12 @@
 
 <!-- Content Section -->
 <main class="services-section container">
-    <div class="row g-4"> <!-- Add g-4 for spacing -->
-  
-          <div class="col-md-4">
-            <div class="card">
-                <img src="https://optimise2.assets-servd.host/tense-pelican/production/global/blog/AdobeStock_484007461.jpeg?w=1600&q=30&auto=format&fit=crop&dm=1670535816&s=dbdc96ceeb35708728bc767ab8a88792" class="card-img-top" alt="..." width="200" height="300">
-                <div class="card-body">
-                    <h5 class="card-title">E-sports Tournaments</h5>
-                    <p class="card-text">9:00</p>
-                    <p class="card-text">May 2</p>
-                    <p class="card-text">S40-open labs</p>
-                    <a href="#" class="btn btn-primary">Event's details</a>
-                </div>
-            </div>
-        </div>
-          <div class="col-md-4">
-            <div class="card">
-                <img src="https://www.effra.eu/wp-content/uploads/2023/11/fotolia_cybersecurity_xl-1-scaled.jpg" class="card-img-top" alt="..." width="200" height="300">
-                <div class="card-body">
-                    <h5 class="card-title">Cybersecurity Workshop</h5>
-                    <p class="card-text">12:00</p>
-                    <p class="card-text">April 18</p>
-                    <p class="card-text">S40-2013</p>
-                    <a href="#" class="btn btn-primary">Event's details</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://images.icon-icons.com/1633/PNG/512/52707partypopper_109417.png" class="card-img-top" alt="..." width="200" height="300">
-                <div class="card-body">
-                    <h5 class="card-title">Game Development Jam</h5>
-                    <p class="card-text">10:00</p>
-                    <p class="card-text">April 24</p>
-                    <p class="card-text">S40-1048</p>
-                    <a href="#" class="btn btn-primary">Event's details</a>
-                </div>
-            </div>
-        </div>
-        
-      </div>
-      <br>
-  </main>
-
+    <h4 class="mb-4">Recommended Events</h4>
+    <div class="row g-4" id="recommended-events">
+        <!-- Recommended events will be loaded here by JS -->
+    </div>
+    <br>
+</main>
 
 <!-- Footer -->
 <footer class="bg-dark text-light pt-5">
@@ -162,9 +124,10 @@
 <!-- Bootstrap Script -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Bootstrap Script -->
+<!-- Events Details Script -->
+<script src="eventDetailsHandler.js"></script>
+<!-- Comments Script -->
 <script src="comments.js"></script>
-
 
 </body>
 </html>

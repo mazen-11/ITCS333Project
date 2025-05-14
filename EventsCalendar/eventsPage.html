@@ -77,83 +77,9 @@
 
 <!-- Content Section -->
 <main class="services-section container">
-  <div class="row g-4"> <!-- Add g-4 for spacing -->
-
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://blog.pango.education/hubfs/Coding%20Blog%20Image.jpg" class="card-img-top" alt="..." width="200" height="300">
-                <div class="card-body">
-                    <h5 class="card-title">Coding Hackathon</h5>
-                    <p class="card-text">8:00</p>
-                    <p class="card-text">March 24</p>
-                    <p class="card-text">S40-13</p>
-                    <a href="eventsDetails.html" class="btn btn-primary">Event's details</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://images.icon-icons.com/1633/PNG/512/52707partypopper_109417.png" class="card-img-top" alt="..." width="200" height="300">
-                <div class="card-body">
-                    <h5 class="card-title">3D Printing Demo</h5>
-                    <p class="card-text">12:00</p>
-                    <p class="card-text">Aug 15</p>
-                    <p class="card-text">S40-1015</p>
-                    <a href="eventsDetails.html" class="btn btn-primary">Event's details</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://optimise2.assets-servd.host/tense-pelican/production/global/blog/AdobeStock_484007461.jpeg?w=1600&q=30&auto=format&fit=crop&dm=1670535816&s=dbdc96ceeb35708728bc767ab8a88792" class="card-img-top" alt="..." width="200" height="300">
-                <div class="card-body">
-                    <h5 class="card-title">E-sports Tournaments</h5>
-                    <p class="card-text">9:00</p>
-                    <p class="card-text">May 2</p>
-                    <p class="card-text">S40-open labs</p>
-                    <a href="eventsDetails.html" class="btn btn-primary">Event's details</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://images.icon-icons.com/1633/PNG/512/52707partypopper_109417.png" class="card-img-top" alt="..." width="200" height="300">
-                <div class="card-body">
-                    <h5 class="card-title">Game Development Jam</h5>
-                    <p class="card-text">10:00</p>
-                    <p class="card-text">April 24</p>
-                    <p class="card-text">S40-1048</p>
-                    <a href="eventsDetails.html" class="btn btn-primary">Event's details</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://www.effra.eu/wp-content/uploads/2023/11/fotolia_cybersecurity_xl-1-scaled.jpg" class="card-img-top" alt="..." width="200" height="300">
-                <div class="card-body">
-                    <h5 class="card-title">Cybersecurity Workshop</h5>
-                    <p class="card-text">12:00</p>
-                    <p class="card-text">April 18</p>
-                    <p class="card-text">S40-2013</p>
-                    <a href="eventsDetails.html" class="btn btn-primary">Event's details</a>
-                    <a href="eventsForm.html" class="btn-primary">Edit/Remove event</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://pngimg.com/uploads/plus/plus_PNG47.png" class="card-img-top" alt="..." width="200" height="300">
-                <div class="card-body">
-                    <h5 class="card-title">Event register</h5>
-                    <p class="card-text">Time</p>
-                    <p class="card-text">Date</p>
-                    <p class="card-text">Place</p>
-                    <a href="eventsForm.html" class="btn btn-primary">Add new event</a>
-                </div>
-            </div>
-        </div>
-        
-    </div>
+  <div class="row g-4" id="events-list">
+    <!-- Events will be loaded here by JS -->
+  </div>
 </main>
 <br>
 
@@ -202,8 +128,66 @@
 
 <!-- filter Events -->
 <script src="filterEvents.js"></script>
+<!-- Event Form & Fetch Handler -->
+<script src="formHandler.js"></script>
 
+<script>
+function formatTime(timeStr) {
+    // Format time as HH:MM (24h to 12h if needed)
+    if (!timeStr) return '';
+    const [h, m] = timeStr.split(":");
+    let hour = parseInt(h);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12 || 12;
+    return `${hour}:${m} ${ampm}`;
+}
 
+function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    return d.toLocaleDateString();
+}
+
+fetch('https://6ee6ec88-0f2a-4299-b825-a1ec248398d4-00-2lq9fq7s2l1jc.sisko.replit.dev/get_events.php')
+  .then(res => res.json())
+  .then(events => {
+    const container = document.getElementById('events-list');
+    container.innerHTML = '';
+    if (!Array.isArray(events) || events.length === 0) {
+      container.innerHTML = '<div class="col-12"><p>No events found.</p></div>';
+      return;
+    }
+    events.forEach(event => {
+      const card = document.createElement('div');
+      card.className = 'col-md-4';
+      card.innerHTML = `
+        <div class="card">
+          <img src="${event.image_url ? event.image_url : 'https://pngimg.com/uploads/plus/plus_PNG47.png'}" class="card-img-top" alt="Event Image" width="200" height="300">
+          <div class="card-body">
+            <h5 class="card-title">${event.name}</h5>
+            <p class="card-text">${formatTime(event.start_time)} - ${formatTime(event.end_time)}</p>
+            <p class="card-text">${formatDate(event.event_date)}</p>
+            <p class="card-text">${event.location}</p>
+            <a href="eventsDetails.html?id=${event.id}" class="btn btn-primary">Event's details</a>
+            <button class="btn btn-primary edit-remove-btn" data-id="${event.id}">Edit/Remove event</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+    // Add event listeners for edit/remove buttons
+    document.querySelectorAll('.edit-remove-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const id = this.getAttribute('data-id');
+        window.location.href = `editEventForm.html?id=${id}`;
+      });
+    });
+  })
+  .catch(() => {
+    document.getElementById('events-list').innerHTML = '<div class="col-12"><p>Error loading events.</p></div>';
+  });
+</script>
 
 </body>
 </html>
