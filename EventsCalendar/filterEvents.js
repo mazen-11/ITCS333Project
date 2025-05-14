@@ -1,11 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const events = [
-        { name: 'Coding Hackathon', time: '8:00', date: 'March 24', location: 'S40-13', image: 'https://blog.pango.education/hubfs/Coding%20Blog%20Image.jpg' },
-        { name: '3D Printing Demo', time: '12:00', date: 'Aug 15', location: 'S40-1015', image: 'https://images.icon-icons.com/1633/PNG/512/52707partypopper_109417.png' },
-        { name: 'E-sports Tournaments', time: '14:00', date: 'May 2', location: 'S40-open labs', image: 'https://optimise2.assets-servd.host/tense-pelican/production/global/blog/AdobeStock_484007461.jpeg?w=1600&q=30&auto=format&fit=crop&dm=1670535816&s=dbdc96ceeb35708728bc767ab8a88792' },
-        { name: 'Game Development Jam', time: '10:00', date: 'April 24', location: 'S40-1048', image: 'https://images.icon-icons.com/1633/PNG/512/52707partypopper_109417.png' },
-        { name: 'Cybersecurity Workshop', time: '12:00', date: 'April 18', location: 'S40-2013', image: 'https://www.effra.eu/wp-content/uploads/2023/11/fotolia_cybersecurity_xl-1-scaled.jpg' }
-    ];
+    let events = [];
 
     const userInput = document.querySelector('.form-control'); // Text input for user filter
     const searchButton = document.querySelector('.btn[type="submit"]'); // Search button
@@ -20,16 +14,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Filtering logic
         const filteredEvents = events.filter(event => {
+            // Convert DB fields to match old structure for filtering
+            const eventTime = event.start_time ? event.start_time : (event.time || '');
+            const eventHour = parseInt(eventTime.split(':')[0]);
             const matchesTime =
                 selectedTime === 'at-day, at-night' ||
-                (selectedTime === 'at-day' && parseInt(event.time.split(':')[0]) < 12) ||
-                (selectedTime === 'at-night' && parseInt(event.time.split(':')[0]) >= 12);
+                (selectedTime === 'at-day' && eventHour < 12) ||
+                (selectedTime === 'at-night' && eventHour >= 12);
 
-            const matchesSearch =
-                selectedFilter === 'event-place'
-                    ? event.location.toLowerCase().includes(searchText) // Text comparison for location
-                    : event[selectedFilter.replace('event-', '')]?.toLowerCase().includes(searchText); // Other filters
-
+            let matchesSearch = false;
+            if (selectedFilter === 'event-place') {
+                matchesSearch = (event.location || '').toLowerCase().includes(searchText);
+            } else if (selectedFilter === 'event-time') {
+                matchesSearch = (eventTime || '').toLowerCase().includes(searchText);
+            } else if (selectedFilter === 'event-date') {
+                matchesSearch = (event.event_date || event.date || '').toLowerCase().includes(searchText);
+            } else if (selectedFilter === 'event-name') {
+                matchesSearch = (event.name || '').toLowerCase().includes(searchText);
+            }
             return matchesTime && matchesSearch;
         });
 
@@ -37,24 +39,30 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function displayEvents(filteredEvents) {
-        eventsContainer.innerHTML = ''; // Clear all previous results
-
-        // Add filtered event cards
+        eventsContainer.innerHTML = '';
         if (filteredEvents.length === 0) {
             eventsContainer.insertAdjacentHTML('beforeend', '<p class="text-center">No events found!</p>');
         } else {
             filteredEvents.forEach(event => {
+                let imgSrc = 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Noto_Emoji_Pie_1f389.svg/512px-Noto_Emoji_Pie_1f389.svg.png?20190226132538';
+                if (event.image_url) {
+                    if (event.image_url.startsWith('http')) {
+                        imgSrc = event.image_url;
+                    } else {
+                        imgSrc = `https://6ee6ec88-0f2a-4299-b825-a1ec248398d4-00-2lq9fq7s2l1jc.sisko.replit.dev/event_image.php?file=${encodeURIComponent(event.image_url)}`;
+                    }
+                }
                 const eventCard = `
                     <div class="col-md-4">
                         <div class="card">
-                            <img src="${event.image}" class="card-img-top" alt="${event.name}" width="200" height="300" />
+                            <img src="${imgSrc}" class="card-img-top" alt="${event.name}" width="200" height="300" />
                             <div class="card-body">
                                 <h5 class="card-title">${event.name}</h5>
-                                <p class="card-text"> ${event.time}</p>
-                                <p class="card-text"> ${event.date}</p>
-                                <p class="card-text"> ${event.location}</p>
-                                <a href="eventsDetails.html" class="btn btn-primary">Event's details</a>
-                                <a href="eventsForm.html" class="btn-primary">Edit/Remove event</a>
+                                <p class="card-text">${event.start_time ? event.start_time + (event.end_time ? ' - ' + event.end_time : '') : (event.time || '')}</p>
+                                <p class="card-text">${event.event_date || event.date || ''}</p>
+                                <p class="card-text">${event.location || ''}</p>
+                                <a href="eventsDetails.html?id=${event.id}" class="btn btn-primary">Event's details</a>
+                                <a href="editEventForm.html?id=${event.id}" class="btn btn-primary">Edit/Remove event</a>
                             </div>
                         </div>
                     </div>
@@ -62,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 eventsContainer.insertAdjacentHTML('beforeend', eventCard);
             });
         }
-
         // Always add the register event card at the end
         const registerEventCard = `
             <div class="col-md-4">
@@ -81,14 +88,23 @@ document.addEventListener('DOMContentLoaded', function () {
         eventsContainer.insertAdjacentHTML('beforeend', registerEventCard);
     }
 
+    // Fetch events from remote backend
+    fetch('https://6ee6ec88-0f2a-4299-b825-a1ec248398d4-00-2lq9fq7s2l1jc.sisko.replit.dev/get_events.php')
+        .then(response => response.json())
+        .then(data => {
+            events = data;
+            displayEvents(events); // Show all events initially
+        })
+        .catch(() => {
+            eventsContainer.innerHTML = '<p class="text-center">Error loading events.</p>';
+        });
+
     searchButton.addEventListener('click', function (e) {
-        e.preventDefault(); // Prevent form submission
-        filterEvents(); // Trigger the filter function
+        e.preventDefault();
+        filterEvents();
     });
-
     timeFilterRadios.forEach(radio => {
-        radio.addEventListener('change', filterEvents); // Trigger filter on time selection
+        radio.addEventListener('change', filterEvents);
     });
-
-    searchFilterDropdown.addEventListener('change', filterEvents); // Trigger filter on dropdown selection
+    searchFilterDropdown.addEventListener('change', filterEvents);
 });

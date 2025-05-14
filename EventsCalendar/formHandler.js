@@ -1,95 +1,66 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('form'); // Select the form element
+// Handles event form submission and fetching events for display
 
-    form.addEventListener('submit', (e) => {
-        e.preventDefault(); // Prevent the form from submitting
-
-        // Capture inputs from the form
-        const eventName = document.querySelector('#eventName').value.trim(); // Event Name
-        const eventTime = document.querySelector('#eventTime').value; // Event Start Time
-        const eventFinishTime = document.querySelector('#eventFinishTime').value; // Event Finish Time
-        const eventDate = document.querySelector('#eventDate').value; // Event Date
-        const eventPlace = document.querySelector('#eventPlace').value.trim(); // Event Location
-        const eventDescription = document.querySelector('#eventDescription').value.trim(); // Event eventDescription
-        const eventImage = document.querySelector('#eventImage').files[0]; // Event Image (file input)
-
-
-        
-        // Validation checks
-        if (!eventName) {
-            alert('Event name is required.');
-            return;
-        }
-
-        if (!eventTime) {
-            alert('Event start time is required.');
-            return;
-        }
-
-        if (!eventFinishTime) {
-            alert('Event finish time is required.');
-            return;
-        }
-
-        // Check if finish time is after start time
-        if (eventTime >= eventFinishTime) {
-            alert('Event finish time must be after the start time.');
-            return;
-        }
-
-        if (!eventDate) {
-            alert('Event date is required.');
-            return;
-        }
-
-        if (!eventPlace) {
-            alert('Event location is required.');
-            return;
-        }
-
-        if (!eventDescription) {
-            alert('Event event description is required.');
-            return;
-        }
-
-        
-
-        // Create an object to store the event data
-        const eventData = {
-            name: eventName,
-            startTime: eventTime,
-            finishTime: eventFinishTime,
-            date: eventDate,
-            location: eventPlace,
-            eventDescription: eventDescription,
-            image: eventImage ? eventImage.name : 'No image uploaded'
-        };
-
-
-
-        // Display an alert to confirm the submission
-        alert('Event registered successfully: ' + JSON.stringify(eventData, null, 2));
+// Submit event form via AJAX
+function setupEventFormHandler() {
+    const form = document.querySelector('form');
+    if (!form) return;
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+        fetch('https://6ee6ec88-0f2a-4299-b825-a1ec248398d4-00-2lq9fq7s2l1jc.sisko.replit.dev/add_event.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Event added successfully!');
+                window.location.href = 'eventsPage.html';
+            } else {
+                alert('Error: ' + (data.error || 'Failed to add event'));
+            }
+        })
+        .catch(() => alert('Error submitting form.'));
     });
+}
 
-
-
-    // Handle the "Remove Event" button
-    const removeButton = document.querySelector('.btn[href="#"]'); // Select the remove button
-    if (removeButton) {
-        removeButton.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent any default link action
-
-            // Reset all input fields
-            document.querySelector('#eventName').value = '';
-            document.querySelector('#eventTime').value = '';
-            document.querySelector('#eventFinishTime').value = '';
-            document.querySelector('#eventDate').value = '';
-            document.querySelector('#eventPlace').value = '';
-            document.querySelector('#eventDescription').value = '';
-            document.querySelector('#eventImage').value = ''; // Clear file input
-
-            // Display a confirmation message
-            alert('Event form cleared!');
+// Fetch and display events on the events page
+function fetchAndDisplayEvents(containerSelector = '.services-section .row') {
+    fetch('https://6ee6ec88-0f2a-4299-b825-a1ec248398d4-00-2lq9fq7s2l1jc.sisko.replit.dev/get_events.php')
+        .then(response => response.json())
+        .then(events => {
+            const container = document.querySelector(containerSelector);
+            if (!container) return;
+            container.innerHTML = '';
+            events.forEach(event => {
+                const card = document.createElement('div');
+                card.className = 'col-md-4';
+                card.innerHTML = `
+                <div class="card">
+                    <img src="${event.image_url ? event.image_url : 'https://pngimg.com/uploads/plus/plus_PNG47.png'}" class="card-img-top" alt="Event Image" width="200" height="300">
+                    <div class="card-body">
+                        <h5 class="card-title">${event.name}</h5>
+                        <p class="card-text">${event.start_time}</p>
+                        <p class="card-text">${event.event_date}</p>
+                        <p class="card-text">${event.location}</p>
+                        <a href="eventsDetails.html?id=${event.id}" class="btn btn-primary">Event's details</a>
+                        <a href="eventsForm.html?id=${event.id}" class="btn btn-primary">Edit/Remove event</a>
+                    </div>
+                </div>
+                `;
+                container.appendChild(card);
+            });
+        })
+        .catch(() => {
+            const container = document.querySelector(containerSelector);
+            if (container) container.innerHTML = '<p>Error loading events.</p>';
         });
-    }
-});
+}
+
+// Auto-setup for each page
+if (window.location.pathname.includes('eventsForm.html')) {
+    setupEventFormHandler();
+}
+if (window.location.pathname.includes('eventsPage.html')) {
+    fetchAndDisplayEvents();
+}
