@@ -58,24 +58,25 @@ $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="../index.html">Campus Hub</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="../EventsCalendar/eventsPage.html">Event Calendar</a></li>
-        <li class="nav-item"><a class="nav-link" href="../sgfinder/sgfinder.html">Study Group Finder</a></li>
-        <li class="nav-item"><a class="nav-link active" href="index.php">Course Reviews</a></li>
-        <li class="nav-item"><a class="nav-link" href="../CourseNotes/index.html">Course Notes</a></li>
-        <li class="nav-item"><a class="nav-link" href="../campus-news/index.php">Campus News</a></li>
-        <li class="nav-item"><a class="nav-link" href="../StudentMarketPlace/index.html">Student Marketplace</a></li>
-      </ul>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Campus Hub</a>
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-expanded="false">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="../EventsCalendar/eventsPage.php">Event Calendar</a></li>
+                <li class="nav-item"><a class="nav-link" href="../sgfinder/sgfinder.html">Study Group Finder</a></li>
+                <li class="nav-item"><a class="nav-link" href="../Course_review/index.php">Course Reviews</a></li>
+                <li class="nav-item"><a class="nav-link" href="../CourseNotes/index.php">Course Notes</a></li>
+                <li class="nav-item"><a class="nav-link" href="../campus-news/index.php">Campus News</a></li>
+                <li class="nav-item"><a class="nav-link" href="add/add-service.html">Products</a></li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>
+
 
 <main class="container my-5">
 
