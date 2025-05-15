@@ -19,7 +19,7 @@ if (!$review) {
 }
 
 // Get comments
-$stmt = $pdo->prepare("SELECT * FROM Comments WHERE review_id = :id ORDER BY created_at DESC");
+$stmt = $pdo->prepare("SELECT * FROM reviews_comments WHERE review_id = :id ORDER BY created_at DESC");
 $stmt->execute([':id' => $id]);
 $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>

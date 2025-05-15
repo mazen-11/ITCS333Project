@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $text = $_POST['comment_text'];
     $review_id = $_POST['review_id'];
 
-    $stmt = $pdo->prepare("INSERT INTO Comments (comment_text, review_id, created_at)
+    $stmt = $pdo->prepare("INSERT INTO reviews_comments (comment_text, review_id, created_at)
                            VALUES (:text, :review_id, NOW())");
     $stmt->execute([
         ':text' => $text,

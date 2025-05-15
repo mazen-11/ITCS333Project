@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id = $_POST['comment_id'];
     $review_id = $_POST['review_id'];
 
-    $stmt = $pdo->prepare("DELETE FROM Comments WHERE id = :id");
+    $stmt = $pdo->prepare("DELETE FROM reviews_comments WHERE id = :id");
     $stmt->execute([':id' => $id]);
 }
 
